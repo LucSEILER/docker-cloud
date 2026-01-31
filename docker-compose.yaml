@@ -67,6 +67,23 @@ services:
   #   restart: unless-stopped
   #   stop_grace_period: 10s
 
+  web-server:
+    build:
+      context: ./webserver
+    image: docker-cloud-webserver
+    container_name: web-server
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+    networks:
+      - app-network
+    restart: always
+
   frontend:
     build:
       context: ./frontend
