@@ -47,8 +47,8 @@ RUN apk add --no-cache curl
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 
 # Copie de la configuration Nginx personnalisée
-# COPY nginx.conf /etc/nginx/nginx.conf
-COPY /nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+# COPY /nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exposition du port
 EXPOSE 80

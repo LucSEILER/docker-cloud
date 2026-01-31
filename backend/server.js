@@ -29,6 +29,26 @@ app.get("/api/hello", (req, res) => {
 //   console.log(`Environment: ${process.env.NODE_ENV}`);
 // });
 
+app.get("/api/config", async (req, res) => {
+  try {
+    // Appel HTTP vers le web-server (communication inter-container)
+    const response = await fetch("http://web-server:8080/config.json");
+    const config = await response.json();
+    
+    res.json({
+      message: "Configuration récupérée depuis le web-server",
+      config: config,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Erreur lors de l'appel au web-server:", error);
+    res.status(500).json({
+      error: "Impossible de contacter le web-server",
+      details: error.message,
+    });
+  }
+});
+
 const server = app.listen(PORT, "0.0.0.0", () => {
   console.log(`Backend listening on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
