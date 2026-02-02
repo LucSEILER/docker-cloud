@@ -5,7 +5,6 @@ services:
       args:
         APP_PORT: 3000
         NODE_ENV: production
-    # image: my-backend:v1.0
     image: docker-cloud-backend
     container_name: docker-cloud-backend
     ports:
@@ -21,7 +20,7 @@ services:
         reservations:
           cpus: '0.25'
           memory: 256M
-    healthcheck:
+    healthcheck: # override healthcheck from Dockerfile
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
       timeout: 5s
@@ -67,11 +66,11 @@ services:
   #   restart: unless-stopped
   #   stop_grace_period: 10s
 
-  web-server:
+  webserver:
     build:
       context: ./webserver
     image: docker-cloud-webserver
-    container_name: web-server
+    container_name: webserver
     deploy:
       resources:
         limits:

@@ -24,26 +24,21 @@ app.get("/api/hello", (req, res) => {
   });
 });
 
-// app.listen(PORT, "0.0.0.0", () => {
-//   console.log(`Backend listening on port ${PORT}`);
-//   console.log(`Environment: ${process.env.NODE_ENV}`);
-// });
-
+// Call from the webserver service
 app.get("/api/config", async (req, res) => {
   try {
-    // Appel HTTP vers le web-server (communication inter-container)
-    const response = await fetch("http://web-server:8080/config.json");
+    const response = await fetch("http://webserver:8080/config.json");
     const config = await response.json();
-    
+
     res.json({
-      message: "Configuration récupérée depuis le web-server",
+      message: "Config fetched successfully",
       config: config,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Erreur lors de l'appel au web-server:", error);
+    console.error("Error fetching config from webserver:", error);
     res.status(500).json({
-      error: "Impossible de contacter le web-server",
+      error: "Unable to contact the webserver",
       details: error.message,
     });
   }
@@ -54,10 +49,10 @@ const server = app.listen(PORT, "0.0.0.0", () => {
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server gracefully');
+process.on("SIGTERM", () => {
+  console.log("SIGTERM signal received: closing HTTP server gracefully");
   server.close(() => {
-    console.log('HTTP server closed');
+    console.log("HTTP server closed");
     process.exit(0);
   });
 });

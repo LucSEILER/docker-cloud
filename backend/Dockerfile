@@ -1,46 +1,45 @@
 # Image de base Node.js
-FROM node:20-alpine
+FROM node:22-alpine
 
-# Arguments de build personnalisés
+# Personnalised build arguments
 ARG APP_PORT=3000
 ARG NODE_ENV=production
 
-# Variables d'environnement
+# Environment variables
 ENV PORT=${APP_PORT}
 ENV NODE_ENV=${NODE_ENV}
 
-# Métadonnées
-LABEL description="Backend Node.js Express personnalisé"
+LABEL description="Backend Node.js Express"
 
-# Création d'un utilisateur non-root pour la sécurité
+# Creation of a new non-root user
 RUN addgroup -g 1001 appgroup && \
     adduser -D -u 1001 -G appgroup appuser
 
-# Répertoire de travail
+# Working directory
 WORKDIR /app
 
-# Installation de dépendances système supplémentaires
+# Installation of additional system dependencies
 RUN apk add --no-cache curl
 
-# Copie et installation des dépendances
+# Copy and install dependencies
 COPY package*.json ./
 RUN npm ci --only=production && \
     npm cache clean --force
 
-# Copie du code source
+# Copy source code
 COPY server.js ./
 
-# Changement de propriétaire
+# Change ownership
 RUN chown -R appuser:appgroup /app
 
-# Bascule vers l'utilisateur non-root
+# Switch to non-root user
 USER appuser
 
-# Exposition du port
+# Expose port
 EXPOSE ${APP_PORT}
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:${APP_PORT}/health || exit 1
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
