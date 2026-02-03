@@ -42,7 +42,6 @@ LABEL description="Serveur Nginx pour Angular"
 # Installation d'outils supplémentaires pour monitoring
 RUN apk add --no-cache curl
 
-
 # Copie des fichiers buildés depuis le stage précédent
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 
