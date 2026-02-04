@@ -16,10 +16,10 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 512M
+          memory: 100M
         reservations:
-          cpus: '0.25'
-          memory: 256M
+          cpus: '0.10'
+          memory: 50M
     healthcheck: # override healthcheck from Dockerfile
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
@@ -40,10 +40,10 @@ services:
       resources:
         limits:
           cpus: '0.2'
-          memory: 128M
+          memory: 40M
         reservations:
           cpus: '0.1'
-          memory: 64M
+          memory: 20M
     depends_on:
       backend:
         condition: service_healthy
@@ -64,10 +64,10 @@ services:
       resources:
         limits:
           cpus: '0.4'
-          memory: 384M
+          memory: 20M
         reservations:
           cpus: '0.15'
-          memory: 192M
+          memory: 10M
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
       interval: 30s
