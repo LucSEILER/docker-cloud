@@ -7,6 +7,7 @@ WORKDIR /app
 # Copy and install dependencies
 COPY package*.json ./
 
+# Use ci instead of install to ensure a clean install of dependencies based on package-lock.json
 RUN npm ci --only=production && \
     npm cache clean --force
 
@@ -49,5 +50,5 @@ EXPOSE ${APP_PORT}
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:${APP_PORT}/health || exit 1
 
-# Run the app
+# Run the app (use [] to to allow signal handling and proper shutdown)
 CMD ["node", "server.js"]
